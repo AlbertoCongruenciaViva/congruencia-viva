@@ -1,69 +1,506 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Congruencia Viva - Alberto Martínez</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alberto Martínez García | Congruencia Viva</title>
+  <meta name="description" content="Congruencia Viva. Detección de incongruencias, silencios, bloqueos y claridad en tiempo real." />
+  <style>
+    :root{
+      --bg:#0b0d10;
+      --panel:#11151b;
+      --panel-2:#171c24;
+      --text:#eceff4;
+      --muted:#b4bcc8;
+      --line:#252c37;
+      --accent:#d7e3ff;
+      --accent-2:#8fb0ff;
+      --btn:#f3f6fb;
+      --btn-text:#0b0d10;
+      --max:1100px;
+      --radius:20px;
+      --shadow:0 12px 40px rgba(0,0,0,.28);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(143,176,255,.10), transparent 28%),
+        linear-gradient(180deg, #0b0d10 0%, #0e1116 100%);
+      color:var(--text);
+      line-height:1.55;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .wrap{width:min(92%, var(--max)); margin:0 auto}
+    .topbar{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter: blur(10px);
+      background:rgba(11,13,16,.72);
+      border-bottom:1px solid rgba(255,255,255,.05);
+    }
+    .topbar .row{
+      display:flex; align-items:center; justify-content:space-between;
+      min-height:72px; gap:20px;
+    }
+    .brand{
+      display:flex; flex-direction:column; gap:2px;
+    }
+    .brand strong{
+      font-size:15px; letter-spacing:.02em;
+    }
+    .brand span{
+      font-size:13px; color:var(--muted);
+    }
+    .nav{
+      display:flex; gap:14px; flex-wrap:wrap;
+      align-items:center;
+    }
+    .nav a{
+      color:var(--muted);
+      font-size:14px;
+      padding:10px 12px;
+      border-radius:999px;
+    }
+    .nav a:hover{background:rgba(255,255,255,.04); color:var(--text)}
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px;
+      padding:14px 20px;
+      border-radius:999px;
+      border:1px solid transparent;
+      background:var(--btn);
+      color:var(--btn-text);
+      font-weight:700;
+      font-size:15px;
+      box-shadow:var(--shadow);
+      transition:.18s ease;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn.secondary{
+      background:transparent;
+      color:var(--text);
+      border-color:var(--line);
+      box-shadow:none;
+    }
+
+    .hero{
+      padding:72px 0 44px;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:28px;
+      align-items:stretch;
+    }
+    .hero-card, .panel{
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .hero-card{
+      padding:42px;
+      min-height:520px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-card::after{
+      content:"";
+      position:absolute; inset:auto -50px -50px auto;
+      width:260px; height:260px;
+      background:radial-gradient(circle, rgba(143,176,255,.22), transparent 60%);
+      pointer-events:none;
+    }
+    .eyebrow{
+      display:inline-block;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.08);
+      color:var(--accent);
+      font-size:13px;
+      letter-spacing:.02em;
+      margin-bottom:18px;
+      background:rgba(255,255,255,.02);
+    }
+    h1{
+      margin:0 0 18px;
+      font-size:clamp(36px, 5.3vw, 68px);
+      line-height:.98;
+      letter-spacing:-.04em;
+    }
+    .lead{
+      font-size:clamp(17px, 1.8vw, 21px);
+      color:var(--muted);
+      max-width:60ch;
+      margin:0 0 26px;
+    }
+    .hero-actions{
+      display:flex; gap:12px; flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    .proof{
+      display:grid; gap:16px;
+    }
+    .proof .panel{
+      padding:24px;
+    }
+    .stat{
+      font-size:13px; color:var(--muted); margin-bottom:8px;
+    }
+    .quote{
+      font-size:18px; line-height:1.35; margin:0 0 10px;
+    }
+    .small{
+      font-size:14px; color:var(--muted);
+    }
+
+    section{
+      padding:28px 0;
+    }
+    .section-head{
+      display:flex; align-items:end; justify-content:space-between;
+      gap:16px; margin-bottom:20px;
+    }
+    .section-head h2{
+      margin:0;
+      font-size:clamp(28px, 3vw, 42px);
+      letter-spacing:-.03em;
+    }
+    .section-head p{
+      margin:0; color:var(--muted); max-width:60ch;
+    }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:18px;
+    }
+    .grid-2{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:18px;
+    }
+
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.015));
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--radius);
+      padding:24px;
+    }
+    .card h3{
+      margin:0 0 10px;
+      font-size:22px;
+      letter-spacing:-.02em;
+    }
+    .card p{margin:0; color:var(--muted)}
+    .tag{
+      display:inline-block;
+      margin-bottom:12px;
+      color:var(--accent-2);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .methods .card{
+      min-height:220px;
+      display:flex; flex-direction:column; justify-content:space-between;
+    }
+    .methods .more{
+      margin-top:18px; font-size:14px; color:var(--accent);
+    }
+
+    .cases .case{
+      min-height:180px;
+    }
+
+    .truth{
+      border-left:3px solid var(--accent-2);
+      padding-left:16px;
+      color:var(--text);
+    }
+
+    .cta{
+      padding:16px 0 80px;
+    }
+    .cta-box{
+      padding:34px;
+      border-radius:28px;
+      background:
+        linear-gradient(180deg, rgba(143,176,255,.12), rgba(143,176,255,.04)),
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border:1px solid rgba(143,176,255,.20);
+      box-shadow:var(--shadow);
+    }
+    .cta-box h2{
+      margin:0 0 12px;
+      font-size:clamp(28px, 3vw, 42px);
+      letter-spacing:-.03em;
+    }
+    .cta-box p{
+      margin:0 0 20px;
+      color:var(--muted);
+      max-width:60ch;
+    }
+
+    footer{
+      border-top:1px solid rgba(255,255,255,.06);
+      padding:22px 0 40px;
+      color:var(--muted);
+      font-size:14px;
+    }
+    footer .row{
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    }
+
+    @media (max-width: 900px){
+      .hero-grid, .grid-3, .grid-2{
+        grid-template-columns:1fr;
+      }
+      .hero-card{
+        min-height:auto;
+        padding:28px;
+      }
+      .topbar .row{
+        min-height:auto;
+        padding:12px 0;
+        align-items:flex-start;
+        flex-direction:column;
+      }
+    }
+  </style>
 </head>
+<body>
 
-<body style="font-family: Arial; text-align: center; padding: 40px; max-width: 800px; margin: auto;">
+  <header class="topbar">
+    <div class="wrap row">
+      <div class="brand">
+        <strong>Alberto Martínez García</strong>
+        <span>Congruencia Viva</span>
+      </div>
+      <nav class="nav">
+        <a href="#que-es">Qué es</a>
+        <a href="#metodos">Métodos</a>
+        <a href="#casos">Casos</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </div>
+  </header>
 
-<h1>Alberto Martínez García</h1>
-<h2>Congruencia Viva</h2>
+  <main>
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <article class="hero-card">
+          <div>
+            <span class="eyebrow">Métodos de lectura, claridad y detección en tiempo real</span>
+            <h1>Hay cosas que sabes, pero no sabes que las sabes.</h1>
+            <p class="lead">
+              Trabajo con silencios, bloqueos, incongruencias y cambios de estado en la comunicación.
+              No me centro en lo que una persona dice. Me centro en lo que ocurre antes de que lo diga.
+            </p>
+            <div class="hero-actions">
+              <a class="btn" href="https://wa.me/TU_NUMERO">Cuéntame tu caso</a>
+              <a class="btn secondary" href="#metodos">Ver métodos</a>
+            </div>
+          </div>
+          <p class="small">
+            No explico todo el núcleo técnico en público. Muestro resultados reales y trabajo de forma directa sobre casos concretos.
+          </p>
+        </article>
 
-<p><strong>Hay cosas que sabes… pero no sabes que las sabes.</strong></p>
-<p>Yo trabajo justo ahí.</p>
+        <aside class="proof">
+          <div class="panel">
+            <div class="stat">Qué ocurre aquí</div>
+            <p class="quote">No trabajo con lo que la gente dice. Trabajo con lo que intenta no decir, con lo que evita, con lo que bloquea o con lo que ya está decidido en silencio.</p>
+            <p class="small">Esto no es teoría decorativa. Es observación aplicada en directo.</p>
+          </div>
+          <div class="panel">
+            <div class="stat">Qué obtiene la otra persona</div>
+            <p class="quote">Más claridad, menos ruido, mejor lectura de conversaciones, mejor comprensión de intenciones y menos ceguera ante lo que no encaja.</p>
+            <p class="small">No prometo magia. Trabajo con estructura, práctica y lectura fina del momento.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
 
-<br>
+    <section id="que-es">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2>Qué es Congruencia Viva</h2>
+          </div>
+          <p>
+            Congruencia Viva es un enfoque orientado a detectar cuándo una persona habla desde claridad y cuándo habla desde ruido, evasión, personaje o desconexión.
+          </p>
+        </div>
 
-<a href="https://wa.me/34625230474">
-<button style="padding:15px; font-size:18px;">Cuéntame tu caso</button>
-</a>
+        <div class="grid-3">
+          <article class="card">
+            <span class="tag">1. Ruido</span>
+            <h3>El problema no es hablar mucho</h3>
+            <p>
+              El problema es hablar sin conexión. La mayoría responde, rellena o evita antes de pensar realmente.
+            </p>
+          </article>
 
-<br><br>
+          <article class="card">
+            <span class="tag">2. Corte</span>
+            <h3>La pausa cambia todo</h3>
+            <p>
+              Cuando el ruido se corta, el silencio deja de ser vacío y empieza a mostrar estructura, conflicto o claridad.
+            </p>
+          </article>
 
-<h3>¿Qué hago?</h3>
+          <article class="card">
+            <span class="tag">3. Lectura</span>
+            <h3>Lo importante ocurre antes</h3>
+            <p>
+              Muchas respuestas empiezan a aparecer antes de que se verbalicen. Ahí es donde se vuelve visible lo que normalmente pasa desapercibido.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-<p>No trabajo con lo que la gente dice.</p>
-<p>Trabajo con lo que ocurre antes de que lo diga.</p>
+    <section id="metodos" class="methods">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2>Métodos</h2>
+          </div>
+          <p>
+            No revelo aquí el procedimiento completo. Sí explico para qué sirve cada línea de trabajo y qué tipo de efecto produce.
+          </p>
+        </div>
 
-<p>Silencios. Bloqueos. Incongruencias.</p>
+        <div class="grid-2">
+          <article class="card">
+            <div>
+              <span class="tag">Método 1</span>
+              <h3>Congruencia Viva</h3>
+              <p>
+                Detección de claridad e incongruencia en tiempo real. Permite reconocer cuándo alguien habla desde verdad, cuándo rellena y cuándo evita.
+              </p>
+            </div>
+            <div class="more">Útil para relaciones, conversaciones difíciles y lectura social fina.</div>
+          </article>
 
-<p>Eso que notas… pero no sabes explicar.</p>
-<p>Yo lo leo en directo.</p>
+          <article class="card">
+            <div>
+              <span class="tag">Método 2</span>
+              <h3>Lectura de silencios</h3>
+              <p>
+                Orientado a detectar respuestas internas antes de que se formulen completamente. Se aplica en preguntas cerradas, bloqueos y vacíos cargados.
+              </p>
+            </div>
+            <div class="more">Útil para ver duda, resistencia, negación o dirección interna antes de la palabra.</div>
+          </article>
 
-<br>
+          <article class="card">
+            <div>
+              <span class="tag">Método 3</span>
+              <h3>Ordenación del ruido</h3>
+              <p>
+                Intervención directa en conversaciones caóticas, aceleradas o defensivas para ayudar a que la persona salga del automatismo y entre en más claridad.
+              </p>
+            </div>
+            <div class="more">Útil para cortar dispersión, contradicción y discurso vacío.</div>
+          </article>
 
-<h3>¿Para qué sirve?</h3>
+          <article class="card">
+            <div>
+              <span class="tag">Método 4</span>
+              <h3>Tu cuarto método</h3>
+              <p>
+                Aquí pones el nombre exacto del cuarto método y una explicación breve de para qué sirve, sin revelar el núcleo técnico.
+              </p>
+            </div>
+            <div class="more">Lo ajustamos cuando me digas el nombre definitivo.</div>
+          </article>
+        </div>
+      </div>
+    </section>
 
-<p>Esto no es teoría.</p>
-<p>Es lo que está pasando en tus conversaciones sin que te des cuenta.</p>
+    <section id="casos" class="cases">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2>Casos y ejemplos</h2>
+          </div>
+          <p>
+            Lo importante no es el discurso posterior. Lo importante es el momento previo: el silencio, el bloqueo, el cambio de energía o la incongruencia antes de responder.
+          </p>
+        </div>
 
-<p>- detectar cuando alguien no está siendo claro</p>
-<p>- entender qué está pasando realmente</p>
-<p>- ver bloqueos que nadie está viendo</p>
-<p>- dejar de ir a ciegas</p>
+        <div class="grid-3">
+          <article class="card case">
+            <span class="tag">Caso</span>
+            <h3>Respuesta detectada antes de ser dicha</h3>
+            <p>
+              Pregunta cerrada, corte de respuesta, silencio y lectura previa al habla. Aquí puedes incrustar o enlazar uno de tus vídeos.
+            </p>
+          </article>
 
-<br>
+          <article class="card case">
+            <span class="tag">Caso</span>
+            <h3>Bloqueo emocional</h3>
+            <p>
+              El silencio no muestra ausencia, muestra resistencia. Aquí puedes poner un caso tipo Angelita o similar.
+            </p>
+          </article>
 
-<h3>Importante</h3>
+          <article class="card case">
+            <span class="tag">Caso</span>
+            <h3>De ruido a claridad</h3>
+            <p>
+              Una persona empieza desordenada, automática o defensiva y termina hablando desde un punto mucho más claro.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-<p>La mayoría de la gente habla sin saber lo que está diciendo realmente.</p>
-<p>Y los demás tampoco lo ven.</p>
+    <section>
+      <div class="wrap">
+        <div class="card">
+          <h3 class="truth">No vendo magia. No prometo infalibilidad. No expongo públicamente todo el procedimiento.</h3>
+          <p>
+            Lo que muestro aquí es real, pero no enseño el núcleo completo fuera de acompañamiento privado. Hay cosas que se entienden leyendo y cosas que solo se entienden cuando se ven y se trabajan en directo.
+          </p>
+        </div>
+      </div>
+    </section>
 
-<br>
+    <section id="contacto" class="cta">
+      <div class="wrap">
+        <div class="cta-box">
+          <h2>Si quieres trabajar conmigo, no es teoría. Es tu caso real.</h2>
+          <p>
+            Si quieres consultar, entender mejor alguno de los métodos o ver qué está ocurriendo realmente en una conversación, puedes escribirme directamente. No todo el mundo encaja aquí. Pero quien encaja, lo nota rápido.
+          </p>
+          <a class="btn" href="https://wa.me/TU_NUMERO">Hablar por WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </main>
 
-<h3>Trabajo privado</h3>
-
-<p>No explico todo en público.</p>
-<p>Trabajo directamente sobre tu caso.</p>
-
-<p>Si quieres ver qué está pasando realmente… escríbeme.</p>
-
-<br>
-
-<a href="https://wa.me/34625230474">
-<button style="padding:15px; font-size:18px;">Escribirme por WhatsApp</button>
-</a>
+  <footer>
+    <div class="wrap row">
+      <div>Alberto Martínez García</div>
+      <div>Congruencia Viva</div>
+    </div>
+  </footer>
 
 </body>
 </html>

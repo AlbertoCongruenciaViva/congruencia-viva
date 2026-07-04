@@ -1,1 +1,4 @@
+User-agent: *
+Allow: /
 
+Sitemap: https://albertocongruenciaviva.github.io/congruencia-viva/sitemap.xml
